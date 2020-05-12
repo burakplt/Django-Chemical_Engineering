@@ -1,0 +1,42 @@
+{% if bips %}
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Chemical</th>
+            <th scope="col">CAS-ID</th>
+            <th scope="col">Activity Coefficient</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for name, cas_no, gamma in report %}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{cas_no}}</td>
+            <td>{{gamma}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<p style="font-weight: 500;font-size: 18px;text-align: left;margin-left: 5px;">Binary interaction parameters for the pairs:</p>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Pair</th>
+                    <th scope="col">Parameter</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for key,value in bips.items %}
+            <tr>
+                <td>{{key}}</td>
+                <td>{{value}}</td>
+            </tr>
+        {% endfor %}
+
+{% else %}
+    
+<p>ERROR! {{report}}</p>
+
+{% endif %}

@@ -1,0 +1,51 @@
+{% extends "base_home.html" %}
+{% load static %}
+
+{% block content %}
+<ol class="breadcrumb" style="background-color: rgba(221, 196, 57, 0.199);font-family: 'Calibri'; font-size: 18px;">
+    <li class="breadcrumb-item"><a href="#">Chemical Engineering</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'vle:vle_home' %}">Vapor-Liquid Equilibrium</a></li>
+    <li class="breadcrumb-item active">Pressure-Temperature Flash</li>
+  </ol>
+  <div class="container">
+    <p style="margin: 10px 10px 20px; font-family: Calibri; font-size: 40px; text-align: center; font-weight: 400;">Bubble and Dew Point Calculations</p>
+<div class="row">
+    <div class="col-md-4">
+      <p>Explanations and Help</p>
+    </div>
+
+    <div class="col-md-8">
+      <p>Calculator App</p>
+
+      <nav>
+          <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist" style="margin: 5px 5px 5px;">
+            <a class="nav-item nav-link active" id="nav-standard-tab" data-toggle="tab" href="#nav-standard" role="tab" aria-controls="nav-home" aria-selected="true"><b>USE INTEGRATED DATABASE</b></a>
+            <a class="nav-item nav-link" id="nav-custom-tab" data-toggle="tab" href="#nav-custom" role="tab" aria-controls="nav-profile" aria-selected="false"><b>USE CUSTOM PARAMETERS</b></a>
+          </div>
+      </nav>
+      <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-standard" role="tabpanel" aria-labelledby="nav-standard-tab" style="border: 1px solid black;">
+             <form method='POST' >
+              {% csrf_token %}
+              {{ formset.as_p }} <button class="btn" type="submit" id="new">Submit</button> </p>
+          </div>
+          
+          <div class="tab-pane fade" id="nav-custom" role="tabpanel" aria-labelledby="nav-custom-tab" style="font-weight: 600;font-size: 40px; text-align: center; margin-top: 100px; color: slateblue;" >
+              COMING SOON!
+          </div>
+    </div>
+  </div>
+  </div>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script>
+  $("select").select2( {
+   placeholder: "Select Compound",
+   allowClear: true
+   } );
+  </script>
+
+{% endblock %}

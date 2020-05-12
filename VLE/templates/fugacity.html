@@ -1,0 +1,305 @@
+{% extends "base_home.html" %}
+{% load static %}
+
+{% block content %}
+
+  
+  <div class="container" style="min-height: 1000px;">
+    
+    <div class="row justify-content-md-center" style="margin-top: 10px;">
+      <div class="collapse" id="help">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Explanations</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pr-tab" data-toggle="tab" href="#pr" role="tab" aria-controls="profile" aria-selected="false">Peng-Robinson</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="srk-tab" data-toggle="tab" href="#srk" role="tab" aria-controls="contact" aria-selected="false">Soave/Redlich-Kwong</a>
+          </li>
+        </ul>
+        <div class="tab-content" id="helpContent">
+          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" style="height: 320px;width: 400px;">Fugacity coefficient calculator for vapor phase is powered with Python and equipped with a database (ChemSep). You can change the units of Pressure and Temperature, the number of compounds (max.4)
+            and the method to calculate binary interaction parameters. Detailed descriptions regarding to Equation of States are on other tabs. Some physical properties of the chemical that are used in calculations will also be showed on the Results section (SOON). Press the help button again to minimize this section.  </div>
+          <div class="tab-pane fade" id="pr" role="tabpanel" aria-labelledby="pr-tab"><img src="{% static 'images/pr78.png' %}" height="320px" width="400px"></div>
+          <div class="tab-pane fade" id="srk" role="tabpanel" aria-labelledby="srk-tab"><img src="{% static 'images/srk.png' %}" height="320px" width="400px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-center" style="margin-top: 20px;">
+        
+      <p style="color: brown;font-size: 36px;"><b>Fugacity Calculator (Vapor)</b>  </p>
+      <a class="btn btn-primary btn-sm" role="button" href="{% url 'vle:activity' %}" style="position: absolute;right:105px ;background-color:  rgb(194, 167, 14);border-color: cornsilk;">Switch to Activity Coefficient</a>
+
+    <form class='fug-ajax-form' method='GET' data-url="{% url 'vle:fugacity_vapor_result' %}"> <!--FORM start-->
+      {% csrf_token %}
+    <div class="row"> <!-- Start Configuration and Compounds section row -->
+      <style>.card{border-radius: 15px;}</style>
+      <div class="col-md-6"> <!-- Column-6 to store Configuration part of form -->
+        <div class="row">
+        <div class="card"> <!-- Card container for Configuration-->
+          <div class="card-body">
+            <h5 class="card-title">Configuration <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#help" aria-expanded="false" aria-controls="collapseExample" style="position: absolute;right:20px ;border-radius: 10px;">
+              Explanations and Help
+            </button></h5>
+          <div class="form-group row"> <!-- Entire row for merhod selection-->
+            <div class="col-md-12">
+              <label for="id_method">Thermodynamic Method:</label>
+            {{form.method}}
+            </div>
+          </div>
+
+          <div class="form-group row"> <!-- Second row for pressure and temperature -->
+            
+            <div class="col-md-6">
+              <label for="id_pressure">Pressure:</label>
+              <div class="input-group">
+              {{form.pressure}}
+              <div class="input-group-append">
+                <select class="form-control" id="unit-pressure" value="0" style="margin-left: 2px;">
+                  <option value="0">Pa</option>
+                  <option value="1">kPa</option>
+                  <option value="2">psi</option>
+                  <option value="3">bar</option>
+                  <option value="4">atm</option>
+                  <option value="5">mmHg</option>
+                </select>
+              </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="id_temperature">Temperature:</label>
+              <div class="input-group">
+                {{form.temperature}}
+                <div class="input-group-append">
+                  <select class="form-control" id="unit-temp" value="0" style="margin-left: 2px;">
+                    <option value="0">Kelvin</option>
+                    <option value="1">Celsius</option>
+                    <option value="2">Fahren.</option>
+                    <option value="3">Rankine</option>
+                  </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="form-group row"> <!--- 3rd row for BIP and Number of compound selection -->
+            <div class="col-md-6">
+              <label for="id_kij">Interaction Parameters:</label>
+              {{form.kij}}
+            </div>
+            <div class="col-md-6">
+              <label for="id_compound_no">Number of Compounds:</label>
+              {{form.compound_no}}
+            </div>
+          </div>
+          <input class='btn btn-primary' type = 'submit' data-url="{% url 'vle:fugacity_vapor_result' %}" value='CALCULATE' style="background-color: darkgreen;margin-top: 10px;"/> 
+          </div><!--/Card body-->
+          </div><!-- /Card-->
+          </div><!-- End row configuration-->
+        
+        <div class="row" style="margin-top: 20px;">  <!-- Row for the Kij inputs-->
+          <div class="row row-cols-1 row-cols-md-2"> <!-- ROW for Kij cards-->
+            
+            <div class="col mb-4">
+              <div class="card" id="bip01" style="display: none;"> <!-- kij1 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 1-2</h5>
+                  <div class="form-group">
+                    <label for="id_kij_input01">Kij Input:</label>
+                    {{form.kij_input01}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune01">Tuning Parameter:</label>
+                    {{form.tune01}}
+                  </div>
+                </div>
+              </div><!-- END Card-1-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="bip02" style="display: none;"> <!-- kij 2 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 1-3</h5>
+                  <div class="form-group">
+                    <label for="id_kij_input02">Kij Input:</label>
+                    {{form.kij_input02}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune02">Tuning Parameter:</label>
+                    {{form.tune02}}
+                  </div>
+                </div>
+              </div><!-- END Card-2-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="bip12" style="display: none;"> <!-- kij 3 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 2-3</h5>
+                  <div class="form-group">
+                    <label for="id_kij_input12">Kij Input:</label>
+                    {{form.kij_input12}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune12">Tuning Parameter:</label>
+                    {{form.tune12}}
+                  </div>
+                </div>
+              </div><!-- END Card-3-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="bip03" style="display: none;"> <!-- kij 4 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 1-4</h5>
+                  <div class="form-group">
+                    <label for="id_kij_input03">Kij Input:</label>
+                    {{form.kij_input03}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune03">Tuning Parameter:</label>
+                    {{form.tune03}}
+                  </div>
+                </div>
+              </div><!-- END Card-4-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="bip13" style="display: none;"> <!-- kij 5 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 2-4 </h5>
+                  <div class="form-group">
+                    <label for="id_kij_input13">Kij Input:</label>
+                    {{form.kij_input13}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune13">Tuning Parameter:</label>
+                    {{form.tune13}}
+                  </div>
+                </div>
+              </div><!-- END Card-5-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="bip23" style="display: none;"> <!-- kij 6 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound 3-4</h5>
+                  <div class="form-group">
+                    <label for="id_kij_input23">Kij Input:</label>
+                    {{form.kij_input23}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_tune23">Tuning Parameter:</label>
+                    {{form.tune23}}
+                  </div>
+                </div>
+              </div><!-- END Card-6-->
+            </div>
+
+          </div><!-- /ROW for Kij cards-->
+        </div>  
+
+        </div><!-- End Configuration Column-6 --> 
+
+        
+        <div class="col-md-6"> <!--- Compounds and Kij fields COL-6 -->
+          
+          <div class="row row-cols-1 row-cols-md-2"> <!-- ROW for Compound cards -->
+            <div class="col mb-4">
+              <div class="card" id="comp1"> <!-- Compound 1 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound-1</h5>
+                  <div class="form-group">
+                    <label for="id_chemical0">Compound:</label>
+                    {{form.chemical0}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_fraction0">Molar Fraction:</label>
+                    {{form.fraction0}}
+                  </div>
+                </div>
+              </div><!-- END Card-1-->
+            </div>
+              
+            <div class="col mb-4">
+              <div class="card" id="comp2"> <!-- Compound 2 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound-2</h5>
+                  <div class="form-group">
+                    <label for="id_chemical1">Compound:</label>
+                    {{form.chemical1}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_fraction1">Molar Fraction:</label>
+                    {{form.fraction1}}
+                  </div>
+                </div>
+              </div><!-- END Card-2-->
+            </div>
+            
+            <div class="col mb-4">
+              <div class="card" id="comp3" style="display: none;"> <!-- Compound 3 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound-3</h5>
+                  <div class="form-group" style="width: 100%;">
+                    <label for="id_chemical2">Compound:</label>
+                    {{form.chemical2}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_fraction2">Molar Fraction:</label>
+                    {{form.fraction2}}
+                  </div>
+                </div>
+              </div><!-- END Card-3-->
+            </div>
+
+            <div class="col mb-4">
+              <div class="card" id="comp4" style="display: none;"> <!-- Compound 4 -->
+                <div class="card-body">
+                  <h5 class="card-title">Compound-4</h5>
+                  <div class="form-group">
+                    <label for="id_chemical3">Compound:</label>
+                     {{form.chemical3}}
+                  </div>
+                  <div class="form-group">
+                    <label for="id_fraction3">Molar Fraction:</label>
+                    {{form.fraction3}}
+                  </div>
+                </div>
+              </div><!-- END Card-4-->
+            </div>
+            
+          </div> <!-- END row for compound cards-->
+          
+          <div class="row" id="result-card"> <!-- RESULT div-->
+            <div class="col-md-12" style="padding-top: 35px;">
+            <div class="card" >
+              <div class="card-body">
+                  <h5 class="card-title" style="font-size: 24px; text-align: center; color: blue;">RESULTS</h5>
+                  <p class="card-text"><div id="result"></div></p>
+              </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- END Compounds and Kij Column-->
+        
+        
+      </form> <!-- END Form-->
+      
+    </div> <!-- End of Row Configuration and Compounds blocks-->
+    
+  </div>
+      
+    
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+<script src="{% static 'fugacity.js' %}"></script>
+{% endblock %}

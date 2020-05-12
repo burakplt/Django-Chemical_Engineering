@@ -1,0 +1,30 @@
+{% extends "base_home.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  
+    <div class="row justify-content-md-center">
+      <div class="col-md-auto">
+        <img src="{% static 'images/vle_banner.png' %}" alt="Responsive image">
+      </div>
+     </div>
+     
+     <nav>
+      <div class="nav nav-pills nav-justified" id="nav-tab" role="tablist" style="margin: 20px 5px 10px; ">
+        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">START!</a>
+        <a class="nav-item nav-link" id="nav-fugacity-tab" data-toggle="tab" href="#nav-fugacity" role="tab" aria-controls="nav-contact" aria-selected="false">FUGACITY</a>
+        <a class="nav-item nav-link" id="nav-dew-tab" data-toggle="tab" href="#nav-dew" role="tab" aria-controls="nav-profile" aria-selected="false">BUBBLE/DEW POINT</a>
+        <a class="nav-item nav-link" id="nav-diagram-tab" data-toggle="tab" href="#nav-diagram" role="tab" aria-controls="nav-contact" aria-selected="false">VLE DIAGRAMS</a>
+        <a class="nav-item nav-link" id="nav-pt_flash-tab" data-toggle="tab" href="#nav-pt_flash" role="tab" aria-controls="nav-contact" aria-selected="false">PT FLASH</a>
+      </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent" style="min-height: 400px;">
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" style="font-family:Calibri;font-size: 22px;text-align: justify; padding: 5px 5px 5px;"><b>ChemicalEasy</b> is more of a practical website rather than full of theoretical explanations. Vapor-Liquid equilibrium is one of the most important thermodynamic concepts that is widely used in process/chemical/mechanical engineering. As you already experienced, lots of complex or long calculations must be performed for the thermodynamic methods. Most of them requires using iterative and numerical calculations, which is overwhelming and not practical. In addition to computational difficulties, physical and thermal properties for the chemicals, namely a database should be provided. In the VLE Calculations section you can freely use the following calculators equipped with 400+ chemicals from ChemSep database (Apache license) and powered with Python. After validation procedures, more chemicals and thermodynamic models will be added soon! <a href="#" style="color: rgb(35, 207, 35);" > <b>Subscribe to e-mail update list</b></a> to be notified immediately (No spam or newsletter, only website updates will be sent.</div>
+      <div class="tab-pane fade" id="nav-fugacity" role="tabpanel" aria-labelledby="nav-fugacity-tab" style="font-family:Calibri;font-size: 22px;text-align: justify; padding: 5px 5px 5px;">Fugacity and Activity coefficients can be calculated online! Roult's Law, EOS, and EOS-Activity coefficient models are available alongside required databases.<a href="{% url 'vle:fugacity' %}" type="button" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(39, 207, 39);border-color:rgb(39, 207, 39);margin-top: 20px;"> <b>GO TO THE CALCULATOR PAGE</b></a></div>
+      <div class="tab-pane fade" id="nav-dew" role="tabpanel" aria-labelledby="nav-dew-tab" style="font-family:Calibri;font-size: 22px;text-align: justify; padding: 5px 5px 5px;">Bubble and Dew point properties can be calculated with ChemicalEasy online application. The calculator utilizies a database, which has over 400 compounds and compitable with 10 thermodynamic methods. (COMING SOON)<a href="#" type="button" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(39, 207, 39);border-color:rgb(39, 207, 39);margin-top: 20px;" > <b>GO TO THE CALCULATOR PAGE</b></a> </div>
+      <div class="tab-pane fade" id="nav-diagram" role="tabpanel" aria-labelledby="nav-diagram-tab" style="font-family:Calibri;font-size: 22px;text-align: justify; padding: 5px 5px 5px;">Pressure-Molar fractions and Temperature-Molar fraction diagrams can be produced online! (COMING SOON) <a href="#" type="button" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(39, 207, 39);border-color:rgb(39, 207, 39);margin-top: 20px;" > GO TO THE CALCULATOR PAGE</a></div>
+      <div class="tab-pane fade" id="nav-pt_flash" role="tabpanel" aria-labelledby="nav-pt_flash-tab" style="font-family:Calibri;font-size: 22px;text-align: justify; padding: 5px 5px 5px;">Pressure-Temperature flash calculation can be performed online! Roult's Law, EOS, and EOS-Activity coefficient models are available alongside required databases. (COMING SOON)<a href="#" type="button" class="btn btn-primary btn-lg btn-block" style="background-color: rgb(39, 207, 39);border-color:rgb(39, 207, 39);margin-top: 20px;"> <b>GO TO THE CALCULATOR PAGE</b></a></div>
+    </div>
+</div>
+{% endblock %}
