@@ -10,3 +10,5 @@ After you have created a Django Project for yourself, run the "get_chemical()" c
 This will parse the XML file and then create Python class pickle objects in VLE/chemicals, which are used as chemical compounds. As long as the file structure and "class Chemical()" definition in the "VLE/engine/chemsep_operation" file remain unchanged, pickle objects are created only once.
 
 VLE part of this project is live on the website www.chemicaleasy.com 
+
+***Chemsep database file "VLE/engine/Databases/chemsep.xml" is provided under ChemSep Apache Artistic License 2.0***
